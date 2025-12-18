@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Info Bencana | Tanah Longsor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f1f8e9);
+        }
+
+        /* ===== LOGIN ===== */
+        .login-page {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            width: 320px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .login-box h2 {
+            color: #2e7d32;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #2e7d32;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .dashboard {
+            display: none;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #1b5e20;
+        }
+
+        .logout {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* ===== NEWS ===== */
+        .news-container {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .news-card:hover {
+            transform: scale(1.03);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+        }
+
+        .news-card .content {
+            padding: 15px;
+        }
+
+        .news-card h3 {
+            color: #2e7d32;
+            margin: 0;
+        }
+
+        .news-card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* ===== POPUP ===== */
+        .popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-box {
+            background: white;
+            padding: 25px;
+            max-width: 450px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .popup-box h2 {
+            color: #1b5e20;
+        }
+
+        .popup-box button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div class="login-page" id="loginPage">
+    <div class="login-box">
+        <h2>🔐 Login Berita Bencana</h2>
+        <input type="text" id="username" placeholder="Masukkan nama">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div class="error" id="errorMsg"></div>
+    </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard" id="dashboardPage">
+    <div class="header">
+        <h1>📰 Berita Tanah Longsor</h1>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="news-container">
+        <div class="news-card" onclick="openPopup(1)">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Tanah_longsor_di_Indonesia.jpg" alt="Tanah Longsor">
+            <div class="content">
+                <h3>Longsor Timbun Permukiman Warga</h3>
+                <p>Hujan deras memicu longsor di daerah perbukitan.</p>
+            </div>
+        </div>
+
+        <div class="news-card" onclick="openPopup(2)">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Landslide_Indonesia.jpg" alt="Longsor Indonesia">
+            <div class="content">
+                <h3>Akses Jalan Terputus Akibat Longsor</h3>
+                <p>Material longsor menutup jalan utama desa.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== POPUP DETAIL ===== -->
+<div class="popup" id="popup">
+    <div class="popup-box">
+        <h2 id="popupTitle"></h2>
+        <p id="popupText"></p>
+        <button onclick="closePopup()">Kembali</button>
+    </div>
+</div>
+
+<script>
+    function login() {
+        const user = document.getElementById("username").value;
+        const pass = document.getElementById("password").value;
+
+        if (user !== "" && pass === "12345") {
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("dashboardPage").style.display = "block";
+        } else {
+            document.getElementById("errorMsg").innerText =
+                "Nama harus diisi & password harus 12345!";
+        }
+    }
+
+    function logout() {
+        document.getElementById("dashboardPage").style.display = "none";
+        document.getElementById("loginPage").style.display = "flex";
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("errorMsg").innerText = "";
+    }
+
+    function openPopup(id) {
+        const title = document.getElementById("popupTitle");
+        const text = document.getElementById("popupText");
+
+        if (id === 1) {
+            title.innerText = "Longsor Timbun Permukiman Warga";
+            text.innerText =
+                "Tanah longsor terjadi akibat curah hujan tinggi yang mengguyur wilayah perbukitan. Sejumlah rumah warga tertimbun material tanah dan evakuasi dilakukan oleh tim gabungan.";
+        } else {
+            title.innerText = "Akses Jalan Terputus Akibat Longsor";
+            text.innerText =
+                "Material longsor menutup akses jalan utama yang menghubungkan desa dengan kota. Warga harus menggunakan jalur alternatif sambil menunggu proses pembersihan.";
+        }
+
+        document.getElementById("popup").style.display = "flex";
+    }
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
